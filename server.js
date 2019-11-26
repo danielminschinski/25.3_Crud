@@ -1,4 +1,42 @@
-var express = require('express');
+const express = require('express');
+const bodyParser = require('body-parser');
+const fs = require('fs');
+
+const app = express();
+let stringifyFile;
+
+app.use(bodyParser.json());
+
+app.get('/getNote', function(req, res){
+	fs.readFile('./test.json', 'utf-8', function(err, data){
+		if(err) throw err;
+		stringifyFile = data;
+		res.send(data);
+	});
+});
+
+app.post('/updateNote/:note', function(req, res){
+	fs.readFile('./test.json', 'utf-8', function(err, data){
+		stringifyFile = req.params.note + data;
+		fs.writeFile('./test.json', stringifyFile, function(err){
+			if (err) throw err;
+			console.log('file updated');
+		});
+	});
+});
+
+app.listen(3000);
+
+
+
+
+
+
+
+
+
+
+/*var express = require('express');
 var app = express();
 
 app.get('/', function(req, res){
@@ -7,10 +45,10 @@ app.get('/', function(req, res){
 });
 
 
-/*app.get('/:id', function(req, res){
+app.get('/:id', function(req, res){
 	console.log('Otrzymałem żądanie GET do strony głównej');
 	res.send('Identyfikator, który został dopisany to ' + req.params.id);
-});*/
+});
 
 /*app.get('/', function(req, res){
 	console.log('Otrzymałem żądanie GET do strony głównej');
@@ -35,15 +73,15 @@ app.get('/list_user', function(req, res){
 app.get('/ab*cd', function(req, res){
 	console.log('Otrzymałem żądanie GET do strony /ab*cd');
 	res.send('Wzór pasuje');
-})*/
+})
 
 
 /*var server = app.listen(3000, function(){
 	console.log('Przykładowa aplikacja nasłuchuje na http://localhost:3000');
-});*/
+});
 
 app.listen(3000);
 
 app.use(function (req, res, next){
 	res.status(404).send('Wybacz, nie mogliśmy odnaleźć tego, czego żądasz!')
-});
+});*/
